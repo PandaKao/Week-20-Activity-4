@@ -11,7 +11,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - cypress/install: # No need to pass any arguments here, unless you specify a version
+      - cypress/install # This should be a simple step, no colon or arguments
       - run:
           name: Run Cypress tests
           command: npm run test
