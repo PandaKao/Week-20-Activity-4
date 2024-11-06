@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Start the server
           command: |
-            npm run start &  # Start the server in the background
+            npm run start:dev &  # Start the server in the background
             # Optionally check if the server is running before proceeding
             echo "Waiting for server to start on http://localhost:3000"
             npx wait-on http://localhost:3000  # This will block until the server is ready
