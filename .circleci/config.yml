@@ -12,7 +12,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - cypress/install: # Automatically installs Cypress and its dependencies
+      - cypress/install: # No need to pass any arguments here, unless you specify a version
       - run:
           name: Run Cypress tests
           command: npm run test
