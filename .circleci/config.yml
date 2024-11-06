@@ -7,7 +7,7 @@ orbs:
 jobs:
   test-node:
     docker:
-      - image: cypress/browsers:node14  # Update to a working tag
+      - image: cypress/browsers:latest
     steps:
       - checkout
       - node/install-packages:
