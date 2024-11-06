@@ -7,7 +7,7 @@ orbs:
 jobs:
   test-node:
     docker:
-      - image: cypress/browsers:latest  # You can adjust the browser image as needed
+      - image: cypress/browsers:latest  # Adjust the browser image as needed
     steps:
       - checkout
       - node/install-packages:
@@ -16,8 +16,10 @@ jobs:
       - run:
           name: Start the server
           command: |
-            npm run start:dev &  # Start the server in the background
-            sleep 10     # Wait for 10 seconds to ensure the server has started
+            npm run start &  # Start the server in the background
+            # Optionally check if the server is running before proceeding
+            echo "Waiting for server to start on http://localhost:3000"
+            npx wait-on http://localhost:3000  # This will block until the server is ready
       - run:
           name: Run Cypress tests
           command: npm run test  # Run your Cypress tests
