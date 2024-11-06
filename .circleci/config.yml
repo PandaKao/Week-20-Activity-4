@@ -2,32 +2,20 @@ version: 2.1
 
 orbs:
   node: circleci/node@5
+  cypress: cypress-io/cypress@2.0.1
 
 jobs:
   test-node:
-    executor: node/default
+    docker:
+      - image: cypress/browsers:node14.18.1-chrome91-ff89
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      # Install dependencies for Cypress to run, including libgtk-3-0
-      - run:
-          name: Install system dependencies for Cypress
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf2.0-0 libxcomposite1 libxrandr2 libasound2 libnspr4 libcups2 libgtk-3-0
-      # Install Cypress (if it's not part of your package.json)
-      - run:
-          name: Install Cypress
-          command: npm install cypress
-      # Start Xvfb in the background
-      - run:
-          name: Start Xvfb
-          command: Xvfb :99 -screen 0 1280x1024x24 &
-      # Run Cypress tests, specifying the correct DISPLAY environment variable
+      - cypress/install: # Automatically installs Cypress and its dependencies
       - run:
           name: Run Cypress tests
-          command: DISPLAY=:99 npx cypress run --headless --browser chrome
+          command: npm run test
 
   build-node:
     executor: node/default
