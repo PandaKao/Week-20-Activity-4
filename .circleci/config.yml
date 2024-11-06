@@ -1,13 +1,56 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5
+
 jobs:
-  hello-world-job:
-    docker:
-      - image: cimg/base:current
+  test-node:
+    executor: node/default
     steps:
-      - run: echo "Hello, World!"
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      # Install dependencies for Cypress to run
+      - run:
+          name: Install system dependencies for Cypress
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf2.0-0 libxcomposite1 libxrandr2 libasound2 libnspr4
+      # Install Cypress (if it's not part of your package.json)
+      - run:
+          name: Install Cypress
+          command: npm install cypress
+      # Start Xvfb in the background
+      - run:
+          name: Start Xvfb
+          command: Xvfb :99 -screen 0 1280x1024x24 &
+      # Run Cypress tests, specifying the correct DISPLAY environment variable
+      - run:
+          name: Run Cypress tests
+          command: DISPLAY=:99 npx cypress run --headless --browser chrome
+
+  build-node:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run build
+      - run:
+          name: Create the ~/artifacts directory if it doesn't exist
+          command: mkdir -p ~/artifacts
+      - run:
+          name: Copy artifacts
+          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
+      - store_artifacts:
+          path: ~/artifacts
+          destination: node-build
 
 workflows:
-  hello-world-workflow:
+  build-and-test:
     jobs:
-      - hello-world-job
+      - test-node
+      - build-node:
+          requires:
+            - test-node
