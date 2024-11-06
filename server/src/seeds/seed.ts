@@ -2,7 +2,7 @@ import db from '../config/connection.js';
 import { Word } from '../models/index.js';
 import cleanDB from './cleanDB.js';
 
-import wordData from './wordSeeds.json';
+const wordData = require('./wordSeeds.json');
 
 try {
   await db();
