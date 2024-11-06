@@ -7,20 +7,20 @@ orbs:
 jobs:
   test-node:
     docker:
-      - image: cypress/browsers:latest
+      - image: cypress/browsers:latest  # You can adjust the browser image as needed
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
       - cypress/install
-       - run:
+      - run:
           name: Start the server
           command: |
             npm run start &  # Start the server in the background
             sleep 10     # Wait for 10 seconds to ensure the server has started
       - run:
           name: Run Cypress tests
-          command: npm run test
+          command: npm run test  # Run your Cypress tests
 
   build-node:
     executor: node/default
