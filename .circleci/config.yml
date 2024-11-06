@@ -4,7 +4,6 @@ orbs:
   node: circleci/node@5
 
 jobs:
-
   test-node:
     executor: node/default
     steps:
@@ -12,8 +11,14 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
+          name: Install Xvfb
+          command: sudo apt-get install -y xvfb
+      - run:
+          name: Start Xvfb
+          command: Xvfb :99 -screen 0 1280x1024x24 &
+      - run:
           name: Run tests
-          command: npm test --passWithNoTests
+          command: DISPLAY=:99 npm test --passWithNoTests
 
   build-node:
     executor: node/default
@@ -33,23 +38,10 @@ jobs:
           path: ~/artifacts
           destination: node-build
 
-  cypress-test:
-    # Using a Cypress image with all dependencies installed
-    docker:
-      - image: cypress/included:13.15.1
-    steps:
-      - checkout
-      - run:
-          name: Run Cypress Tests
-          command: npx cypress run --browser chrome --headless
-
 workflows:
   build-and-test:
     jobs:
       - test-node
       - build-node:
-          requires:
-            - test-node
-      - cypress-test:
           requires:
             - test-node
