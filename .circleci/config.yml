@@ -10,20 +10,24 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      # Update package list before installing xvfb
+      # Install dependencies for Cypress to run
       - run:
-          name: Update apt-get and install Xvfb
+          name: Install system dependencies for Cypress
           command: |
             sudo apt-get update
-            sudo apt-get install -y xvfb
+            sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf2.0-0 libxcomposite1 libxrandr2 libasound2 libnspr4
+      # Install Cypress (if it's not part of your package.json)
+      - run:
+          name: Install Cypress
+          command: npm install cypress
       # Start Xvfb in the background
       - run:
           name: Start Xvfb
           command: Xvfb :99 -screen 0 1280x1024x24 &
-      # Run the tests, specifying the correct DISPLAY environment variable
+      # Run Cypress tests, specifying the correct DISPLAY environment variable
       - run:
-          name: Run tests
-          command: DISPLAY=:99 npm test --passWithNoTests
+          name: Run Cypress tests
+          command: DISPLAY=:99 npx cypress run --headless --browser chrome
 
   build-node:
     executor: node/default
