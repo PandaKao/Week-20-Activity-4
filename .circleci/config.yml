@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Start the server
           command: |
-            npm run start &  # Start the server in the background
+            npm run start:dev &  # Start the server in the background
             sleep 10     # Wait for 10 seconds to ensure the server has started
       - run:
           name: Run Cypress tests
