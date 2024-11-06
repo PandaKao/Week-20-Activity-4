@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  node: circleci/node@5
   cypress: cypress-io/cypress@3.4.0
 
 jobs:
@@ -11,7 +12,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - cypress/install
+      - cypress/install # This should be a simple step, no colon or arguments
       - run:
           name: Run Cypress tests
           command: npm run test
