@@ -1,21 +1,25 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5
   cypress: cypress-io/cypress@3.4.0
 
 jobs:
   test-node:
     docker:
-      - image: cypress/browsers:latest
+      - image: cypress/browsers:latest  # Use the latest available image
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
+      - run:
+          name: Start the server
+          command: |
+            npm start &  # This will start the server in the background
+            sleep 5      # Wait for the server to be up and running
       - cypress/install
       - run:
           name: Run Cypress tests
-          command: npm run test
+          command: npx cypress run --headless --browser chrome
 
   build-node:
     executor: node/default
