@@ -10,12 +10,12 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      # Install dependencies for Cypress to run
+      # Install dependencies for Cypress to run, including libcups2
       - run:
           name: Install system dependencies for Cypress
           command: |
             sudo apt-get update
-            sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf2.0-0 libxcomposite1 libxrandr2 libasound2 libnspr4
+            sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf2.0-0 libxcomposite1 libxrandr2 libasound2 libnspr4 libcups2
       # Install Cypress (if it's not part of your package.json)
       - run:
           name: Install Cypress
