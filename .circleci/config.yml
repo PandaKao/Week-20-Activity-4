@@ -7,12 +7,12 @@ orbs:
 jobs:
   test-node:
     docker:
-      - image: cypress/browsers:node14.18.1-chrome91-ff89
+      - image: cypress/browsers:node14.18.1-chrome91
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - cypress/install # This should be a simple step, no colon or arguments
+      - cypress/install # No need to pass any arguments here
       - run:
           name: Run Cypress tests
           command: npm run test
