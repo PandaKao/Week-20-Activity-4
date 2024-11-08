@@ -2,13 +2,19 @@ import db from '../config/connection.js';
 import { Word } from '../models/index.js';
 import cleanDB from './cleanDB.js';
 
-const wordData = require('./wordSeeds.json'); // Use require to load the JSON file
+// Dynamically import the JSON file using the correct syntax
+const wordData = await import('./wordSeeds.json', {
+  assert: { type: 'json' },
+});
 
 async function seedDatabase() {
   try {
     await db();
     await cleanDB();
-    await Word.insertMany(wordData);
+
+    // Insert the data into the database
+    await Word.insertMany(wordData.default);  // Access the default export
+
     console.log('Seeding completed successfully!');
     process.exit(0);
   } catch (error) {

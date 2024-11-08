@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "engines": {
+  "node": "17.x"
+},
   "scripts": {
     "start": "npm run client:build && npm run server",
     "start:dev": "concurrently \"npm run server:dev\" \"wait-on tcp:3001 && npm run client:dev\"",
